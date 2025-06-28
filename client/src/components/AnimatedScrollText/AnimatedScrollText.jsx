@@ -4,19 +4,19 @@ import "./animatedScrollText.styles.scss";
 const AnimatedScrollText = ({ text }) => {
   const scrollRef = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
+  const [speed, setSpeed] = useState(1); // scroll step
 
   useEffect(() => {
-    const scrollStep = 1;
     const intervalDelay = 30;
 
     const interval = setInterval(() => {
       if (!isPaused && scrollRef.current) {
-        scrollRef.current.scrollTop += scrollStep;
+        scrollRef.current.scrollTop += speed;
       }
     }, intervalDelay);
 
     return () => clearInterval(interval);
-  }, [isPaused]);
+  }, [isPaused, speed]);
 
   const handleRestart = () => {
     if (scrollRef.current) {
@@ -27,14 +27,23 @@ const AnimatedScrollText = ({ text }) => {
   return (
     <div>
       <div id="controls">
-        <button
-          onClick={() => setIsPaused((prev) => !prev)}
-          id="pause-btn"
-          className="btn"
-        >
+        <button onClick={() => setIsPaused((prev) => !prev)} id="pause-btn">
           {isPaused ? "▶️ Resume" : "⏸ Pause"}
         </button>
-        <button onClick={handleRestart} id="restart-btn" className="btn">
+
+        <div id="speed-control">
+          <label htmlFor="speed">Speed: {speed}</label>
+          <input
+            type="range"
+            id="speed"
+            min="1"
+            max="10"
+            step="1"
+            value={speed}
+            onChange={(e) => setSpeed(parseInt(e.target.value))}
+          />
+        </div>
+        <button onClick={handleRestart} id="restart-btn">
           🔄 Restart
         </button>
       </div>
