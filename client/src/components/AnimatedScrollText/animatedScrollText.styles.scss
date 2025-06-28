@@ -1,0 +1,54 @@
+#scroll-container {
+  height: 60vh;
+  overflow-y: hidden;
+  background-color: #0a0a0a;
+  border-radius: 6px;
+  padding: 0;
+  scroll-behavior: smooth;
+  margin: 1rem auto;
+  height: 100vh;
+}
+
+#scroll-content {
+  padding: 60vh 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.scroll-line {
+  font-size: 1.6rem;
+  color: #00ffd5;
+  line-height: 2.8rem;
+  text-align: center;
+  white-space: pre-wrap;
+  margin-bottom: 1rem;
+}
+
+#pause-btn {
+  display: block;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #333;
+  }
+}
+
+#controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0rem 2rem;
+}
+
+@media (max-width: 480px) {
+  #scroll-container {
+    height: 50vh;
+  }
+
+  .scroll-line {
+    font-size: 1.2rem;
+    line-height: 2rem;
+  }
+}

@@ -6,7 +6,8 @@ describe("app", () => {
     expect(1).toBe(1);
   });
 
-  it("should test for base route", async() => {
-    const { body, statusCode } = await request(app).get("/")
-  })
+  it("should test for base route", async () => {
+    const { body, statusCode } = await request(app).get("/");
+    expect(statusCode).toBe(200);
+  });
 });

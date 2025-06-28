@@ -12,7 +12,7 @@
 }
 
 body {
-  background-color: var(--bg-color);
+  background-color: rgb(19, 19, 19);
   min-height: 100vh;
   font-family: "Inter", sans-serif;
   color: white;
@@ -53,7 +53,7 @@ ul {
 .text {
   font-size: 16px;
   line-height: 25px;
-  margin-bottom: 1rem; 
+  margin-bottom: 1rem;
 }
 
 // general styling
@@ -62,6 +62,7 @@ ul {
   border: none;
   cursor: pointer;
   transition: all ease-in-out 300ms;
-  background-color: var(--btn-color);
+  background-color: green;
   padding: 1rem 2rem;
+  color: white; 
 }
