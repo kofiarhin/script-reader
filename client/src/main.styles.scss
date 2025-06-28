@@ -1,14 +1,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
+
+:root {
+  --bg-dark: #1e1e1e;
+  --primary-color: blue;
+  --btn-color: #4fd1c5;
+}
+
 * {
   margin: 0;
   padding: 0;
 }
 
 body {
-  background-color: black;
+  background-color: var(--bg-color);
   min-height: 100vh;
   font-family: "Inter", sans-serif;
-  background-color: rgb(22, 22, 22);
   color: white;
 }
 
@@ -47,4 +53,15 @@ ul {
 .text {
   font-size: 16px;
   line-height: 25px;
+  margin-bottom: 1rem; 
+}
+
+// general styling
+.btn {
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: all ease-in-out 300ms;
+  background-color: var(--btn-color);
+  padding: 1rem 2rem;
 }

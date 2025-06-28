@@ -19,6 +19,9 @@ const App = () => {
             vero numquam ex eligendi at facilis inventore explicabo quibusdam
             alias?
           </p>
+          <button className="btn" onClick={() => console.log("hello world ")}>
+            Generate Script
+          </button>
         </div>
       </section>
     </div>
