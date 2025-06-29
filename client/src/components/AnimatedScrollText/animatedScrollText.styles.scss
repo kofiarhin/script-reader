@@ -6,6 +6,7 @@
   margin: auto;
   max-width: 1200px;
   min-width: 300px;
+  position: relative;
 }
 
 #scroll-container {
@@ -45,6 +46,7 @@
   border-radius: 6px;
   border: 1px solid #222;
   margin-bottom: 1rem;
+  z-index: 10;
 
   button {
     cursor: pointer;
@@ -158,7 +160,7 @@
   }
 }
 
-// === Fullscreen Mode Controls ===
+// Fullscreen Mode Adjustments
 .animated-scroll-wrapper.fullscreen-mode {
   padding: 0;
   margin: 0;
@@ -166,7 +168,6 @@
   width: 100vw;
   height: 100vh;
   border-radius: 0;
-  position: relative;
 
   #scroll-container {
     height: 100vh;
@@ -174,32 +175,28 @@
   }
 
   #controls {
-    position: fixed;
+    position: absolute;
     top: 1rem;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(15, 15, 15, 0.85);
-    padding: 0.8rem 1.5rem;
+    justify-content: center;
+    background-color: rgba(15, 15, 15, 0.85);
+    border: none;
     border-radius: 8px;
-    display: flex;
-    gap: 1rem;
-    z-index: 1000;
-    border: 1px solid #333;
+    padding: 0.75rem 1.5rem;
+    backdrop-filter: blur(4px);
 
     button {
-      display: none;
+      margin: 0 0.5rem;
     }
 
-    #pause-btn,
-    #fullscreen-btn {
-      display: inline-block;
-      padding: 0.7rem 1.1rem;
-      font-size: 1rem;
+    button:not(#pause-btn):not(#fullscreen-btn) {
+      display: none;
     }
   }
 }
 
-// === Mobile Responsiveness ===
+// Mobile Responsive
 @media (max-width: 480px) {
   #scroll-container {
     height: 50vh;
@@ -237,16 +234,13 @@
 
   .animated-scroll-wrapper.fullscreen-mode #controls {
     flex-direction: column;
-    gap: 0.5rem;
-    top: 0.75rem;
-    bottom: auto;
-    padding: 0.6rem 1rem;
+    top: 1rem;
+    left: 1rem;
+    transform: none;
 
-    #pause-btn,
-    #fullscreen-btn {
+    button {
+      margin: 0.25rem 0;
       width: 100%;
-      font-size: 0.95rem;
-      padding: 0.6rem 1rem;
     }
   }
 }

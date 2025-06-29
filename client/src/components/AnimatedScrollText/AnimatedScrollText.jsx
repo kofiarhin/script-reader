@@ -36,12 +36,18 @@ const AnimatedScrollText = ({ text, onSetText }) => {
     setHasStarted(true);
     setIsPaused(false);
     setIsStopped(false);
-    if (!document.fullscreenElement) {
+    if (!document.fullscreenElement && wrapperRef.current) {
       wrapperRef.current.requestFullscreen();
     }
   };
 
-  const handlePause = () => {
+  const handlePause = async () => {
+    // If resuming (isPaused === true), request fullscreen
+    if (isPaused) {
+      if (!document.fullscreenElement && wrapperRef.current) {
+        await wrapperRef.current.requestFullscreen();
+      }
+    }
     setIsPaused((prev) => !prev);
   };
 
