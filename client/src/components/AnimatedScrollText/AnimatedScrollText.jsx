@@ -7,7 +7,7 @@ const AnimatedScrollText = ({ text }) => {
   const [speed, setSpeed] = useState(1); // scroll step
 
   useEffect(() => {
-    const intervalDelay = 80;
+    const intervalDelay = 60;
 
     const interval = setInterval(() => {
       if (!isPaused && scrollRef.current) {

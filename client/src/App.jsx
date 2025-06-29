@@ -11,7 +11,12 @@ const App = () => {
     <div>
       <section id="heading">
         <div className="container">
-          <TextUpload onUpload={handleUpload} />
+          {text && (
+            <button onClick={() => setText(null)} className="btn">
+              New
+            </button>
+          )}
+          {!text && <TextUpload onUpload={handleUpload} />}
         </div>
       </section>
       {text && <AnimatedScrollText text={text} />}

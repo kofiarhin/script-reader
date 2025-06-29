@@ -1,12 +1,11 @@
 #scroll-container {
-  height: 60vh;
+  height: 100vh;
   overflow-y: hidden;
   background-color: #0a0a0a;
   border-radius: 6px;
   padding: 0;
   scroll-behavior: smooth;
   margin: 1rem auto;
-  height: 100vh;
 }
 
 #scroll-content {
@@ -23,29 +22,108 @@
   text-align: center;
   white-space: pre-wrap;
   margin-bottom: 1rem;
-}
-
-#pause-btn {
-  display: block;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  background-color: blue;
-
-  &:hover {
-    background: #333;
-  }
+  font-family: "Fira Sans", sans-serif;
 }
 
 #controls {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
-  padding: 0rem 2rem;
-}
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  background-color: #0f0f0f;
+  border-radius: 6px;
+  border: 1px solid #222;
+  margin-bottom: 1rem;
 
-#restart-btn {
-  background-color: red;
-  padding: 0.8rem 2rem;
+  #pause-btn,
+  #restart-btn {
+    cursor: pointer;
+    padding: 0.6rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    transition: background-color 0.2s ease;
+  }
+
+  #pause-btn {
+    background-color: #007bff;
+
+    &:hover {
+      background-color: #005ecb;
+    }
+  }
+
+  #restart-btn {
+    background-color: #dc3545;
+
+    &:hover {
+      background-color: #a72833;
+    }
+  }
+
+  #speed-control {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+
+    label {
+      font-size: 0.85rem;
+      color: #ccc;
+      white-space: nowrap;
+      min-width: 60px;
+    }
+
+    input[type="range"] {
+      flex: 1;
+      height: 4px;
+      cursor: pointer;
+      appearance: none;
+      background: #333;
+      border-radius: 5px;
+      transition: background 0.2s ease;
+      accent-color: #00ffd5;
+      min-width: 120px;
+      max-width: 100%;
+
+      &:hover {
+        background: #444;
+      }
+
+      &::-webkit-slider-thumb {
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background-color: #00ffd5;
+        border: none;
+        transition: transform 0.2s;
+      }
+
+      &::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background-color: #00ffd5;
+        border: none;
+      }
+
+      &::-webkit-slider-runnable-track {
+        height: 4px;
+        border-radius: 4px;
+      }
+
+      &::-moz-range-track {
+        height: 4px;
+        border-radius: 4px;
+        background: #333;
+      }
+    }
+  }
 }
 
 @media (max-width: 480px) {
@@ -56,5 +134,31 @@
   .scroll-line {
     font-size: 1.2rem;
     line-height: 2rem;
+  }
+
+  #controls {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+
+    #pause-btn,
+    #restart-btn {
+      width: 100%;
+      text-align: center;
+    }
+
+    #speed-control {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.5rem;
+
+      label {
+        text-align: left;
+      }
+
+      input[type="range"] {
+        width: 100%;
+      }
+    }
   }
 }

@@ -9,7 +9,6 @@ const TextUpload = ({ onUpload }) => {
     if (!file) return;
 
     const text = await file.text();
-    console.log(text);
     onUpload(text);
   };
 
