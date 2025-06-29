@@ -8,15 +8,18 @@ const AnimatedScrollText = ({ text, onSetText }) => {
   const [isPaused, setIsPaused] = useState(false);
   const [isStopped, setIsStopped] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [speed, setSpeed] = useState(1);
+  const [showControls, setShowControls] = useState(true);
+  const [speed, setSpeed] = useState(1); // scroll step
 
   useEffect(() => {
     const intervalDelay = 60;
+
     const interval = setInterval(() => {
       if (hasStarted && !isPaused && !isStopped && scrollRef.current) {
         scrollRef.current.scrollTop += speed;
       }
     }, intervalDelay);
+
     return () => clearInterval(interval);
   }, [hasStarted, isPaused, isStopped, speed]);
 
@@ -24,25 +27,50 @@ const AnimatedScrollText = ({ text, onSetText }) => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
     };
+
     document.addEventListener("fullscreenchange", handleFullscreenChange);
     return () =>
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
 
+  useEffect(() => {
+    if (!isFullscreen) return;
+
+    let timeout;
+    const show = () => {
+      setShowControls(true);
+      clearTimeout(timeout);
+      timeout = setTimeout(() => setShowControls(false), 3000);
+    };
+
+    const events = ["mousemove", "mousedown", "touchstart", "click"];
+    events.forEach((evt) => document.addEventListener(evt, show));
+
+    show();
+
+    return () => {
+      events.forEach((evt) => document.removeEventListener(evt, show));
+      clearTimeout(timeout);
+    };
+  }, [isFullscreen]);
+
   const handleStart = () => {
     setHasStarted(true);
     setIsPaused(false);
     setIsStopped(false);
-    if (!document.fullscreenElement && wrapperRef.current) {
+    if (!document.fullscreenElement) {
       wrapperRef.current.requestFullscreen();
     }
   };
 
-  const handlePause = async () => {
-    if (isPaused && !document.fullscreenElement && wrapperRef.current) {
-      await wrapperRef.current.requestFullscreen();
-    }
-    setIsPaused((prev) => !prev);
+  const handlePause = () => {
+    setIsPaused((prev) => {
+      const resuming = prev; // prev == true => we're resuming
+      if (resuming && !document.fullscreenElement) {
+        wrapperRef.current.requestFullscreen();
+      }
+      return !prev;
+    });
   };
 
   const handleStop = () => {
@@ -82,7 +110,18 @@ const AnimatedScrollText = ({ text, onSetText }) => {
       }`}
       ref={wrapperRef}
     >
-      <div id="controls">
+      <div
+        id="controls"
+        style={
+          isFullscreen
+            ? {
+                opacity: showControls ? 1 : 0,
+                pointerEvents: showControls ? "auto" : "none",
+                transition: "opacity 0.3s ease",
+              }
+            : {}
+        }
+      >
         {isFullscreen ? (
           <>
             <button id="pause-btn" onClick={handlePause}>
