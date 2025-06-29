@@ -1,11 +1,20 @@
+.animated-scroll-wrapper {
+  background-color: #0a0a0a;
+  color: #00ffd5;
+  border-radius: 6px;
+  padding: 1rem;
+  margin: auto;
+  max-width: 1200px;
+  min-width: 300px;
+}
+
 #scroll-container {
   height: 100vh;
   overflow-y: hidden;
-  background-color: #0a0a0a;
-  border-radius: 6px;
-  padding: 0;
   scroll-behavior: smooth;
-  margin: 1rem auto;
+  border-radius: 6px;
+  background-color: #0a0a0a;
+  margin-top: 1rem;
 }
 
 #scroll-content {
@@ -17,12 +26,12 @@
 
 .scroll-line {
   font-size: 1.6rem;
-  color: #00ffd5;
   line-height: 2.8rem;
   text-align: center;
   white-space: pre-wrap;
   margin-bottom: 1rem;
   font-family: "Fira Sans", sans-serif;
+  color: #00ffd5;
 }
 
 #controls {
@@ -37,8 +46,7 @@
   border: 1px solid #222;
   margin-bottom: 1rem;
 
-  #pause-btn,
-  #restart-btn {
+  button {
     cursor: pointer;
     padding: 0.6rem 1.5rem;
     font-size: 0.95rem;
@@ -49,6 +57,14 @@
     transition: background-color 0.2s ease;
   }
 
+  #start-btn {
+    background-color: #28a745;
+
+    &:hover {
+      background-color: #1f8c3c;
+    }
+  }
+
   #pause-btn {
     background-color: #007bff;
 
@@ -57,11 +73,27 @@
     }
   }
 
+  #stop-btn {
+    background-color: #6c757d;
+
+    &:hover {
+      background-color: #5a6268;
+    }
+  }
+
   #restart-btn {
     background-color: #dc3545;
 
     &:hover {
       background-color: #a72833;
+    }
+  }
+
+  #fullscreen-btn {
+    background-color: #6610f2;
+
+    &:hover {
+      background-color: #520dc2;
     }
   }
 
@@ -126,6 +158,31 @@
   }
 }
 
+// Fullscreen Mode Adjustments
+.animated-scroll-wrapper.fullscreen-mode {
+  padding: 0;
+  margin: 0;
+  max-width: 100vw;
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+
+  #scroll-container {
+    height: 100vh;
+    border-radius: 0;
+  }
+
+  #controls {
+    justify-content: center;
+    border: none;
+    padding: 1rem;
+
+    button:not(#fullscreen-btn) {
+      display: none;
+    }
+  }
+}
+
 @media (max-width: 480px) {
   #scroll-container {
     height: 50vh;
@@ -141,8 +198,7 @@
     align-items: stretch;
     padding: 1rem;
 
-    #pause-btn,
-    #restart-btn {
+    button {
       width: 100%;
       text-align: center;
     }

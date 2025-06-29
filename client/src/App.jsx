@@ -11,15 +11,10 @@ const App = () => {
     <div>
       <section id="heading">
         <div className="container">
-          {text && (
-            <button onClick={() => setText(null)} className="btn">
-              New
-            </button>
-          )}
           {!text && <TextUpload onUpload={handleUpload} />}
         </div>
       </section>
-      {text && <AnimatedScrollText text={text} />}
+      {text && <AnimatedScrollText text={text} onSetText={setText} />}
     </div>
   );
 };
