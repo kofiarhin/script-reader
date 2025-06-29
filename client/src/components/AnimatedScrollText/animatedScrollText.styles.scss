@@ -6,6 +6,7 @@
   margin: auto;
   max-width: 1200px;
   min-width: 300px;
+  position: relative;
 }
 
 #scroll-container {
@@ -25,8 +26,6 @@
 }
 
 .scroll-line {
-  font-size: clamp(1.4rem, 2.2vw, 2.2rem);
-  line-height: 1.8em;
   text-align: center;
   white-space: pre-wrap;
   margin-bottom: 1rem;
@@ -45,6 +44,17 @@
   border-radius: 6px;
   border: 1px solid #222;
   margin-bottom: 1rem;
+  transition: opacity 0.3s ease, pointer-events 0.3s ease;
+
+  &.showing {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  &:not(.showing) {
+    opacity: 0;
+    pointer-events: none;
+  }
 
   button {
     cursor: pointer;
@@ -97,17 +107,19 @@
     }
   }
 
-  #speed-control {
+  #speed-control,
+  #font-size-control {
     display: flex;
     align-items: center;
     gap: 0.75rem;
     flex: 1;
+    min-width: 200px;
 
     label {
       font-size: 0.85rem;
       color: #ccc;
       white-space: nowrap;
-      min-width: 60px;
+      min-width: 80px;
     }
 
     input[type="range"] {
@@ -119,7 +131,7 @@
       border-radius: 5px;
       transition: background 0.2s ease;
       accent-color: #00ffd5;
-      min-width: 120px;
+      min-width: 100px;
       max-width: 100%;
 
       &:hover {
@@ -156,9 +168,19 @@
       }
     }
   }
+
+  .start-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    #start-btn {
+      width: auto;
+    }
+  }
 }
 
-// Fullscreen Mode Enhancements
+// Fullscreen layout
 .animated-scroll-wrapper.fullscreen-mode {
   padding: 0;
   margin: 0;
@@ -172,51 +194,28 @@
     border-radius: 0;
   }
 
-  .scroll-line {
-    font-size: clamp(1.8rem, 3vw, 3rem);
-    line-height: 1.9em;
-  }
-
   #controls {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.7);
+    width: 100%;
+    background: rgba(15, 15, 15, 0.95);
+    z-index: 1000;
     border: none;
+    border-bottom: 1px solid #222;
     border-radius: 0;
-    padding: 0.75rem 1rem;
-    z-index: 999;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-
-    button,
-    #speed-control {
-      display: none;
-    }
-
-    &.showing {
-      opacity: 1;
-      pointer-events: auto;
-
-      button,
-      #speed-control {
-        display: flex;
-      }
-    }
   }
 }
 
-// Mobile responsiveness
+// Responsive adjustments
 @media (max-width: 480px) {
   #scroll-container {
     height: 50vh;
   }
 
   .scroll-line {
-    font-size: 1.2rem;
-    line-height: 2rem;
+    font-size: 16px;
+    line-height: 26px;
   }
 
   #controls {
@@ -229,7 +228,8 @@
       text-align: center;
     }
 
-    #speed-control {
+    #speed-control,
+    #font-size-control {
       flex-direction: column;
       align-items: stretch;
       gap: 0.5rem;

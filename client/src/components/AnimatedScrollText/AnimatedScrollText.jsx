@@ -4,26 +4,26 @@ import "./animatedScrollText.styles.scss";
 const AnimatedScrollText = ({ text, onSetText }) => {
   const scrollRef = useRef(null);
   const wrapperRef = useRef(null);
-
   const [hasStarted, setHasStarted] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isStopped, setIsStopped] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [fontSize, setFontSize] = useState(24); // in px
+  const [speed, setSpeed] = useState(1); // scroll step
   const [showControls, setShowControls] = useState(true);
-  const [speed, setSpeed] = useState(1);
 
-  // Scroll logic
+  // Auto-scroll interval
   useEffect(() => {
+    const intervalDelay = 60;
     const interval = setInterval(() => {
       if (hasStarted && !isPaused && !isStopped && scrollRef.current) {
         scrollRef.current.scrollTop += speed;
       }
-    }, 60);
-
+    }, intervalDelay);
     return () => clearInterval(interval);
   }, [hasStarted, isPaused, isStopped, speed]);
 
-  // Track fullscreen changes
+  // Fullscreen change tracking
   useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
@@ -33,23 +33,25 @@ const AnimatedScrollText = ({ text, onSetText }) => {
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
 
-  // Auto-hide controls in fullscreen
+  // Show/hide controls in fullscreen on user interaction
   useEffect(() => {
-    if (!isFullscreen) return;
-
     let timeout;
-    const show = () => {
+    const showTemporarily = () => {
+      if (!isFullscreen) return;
       setShowControls(true);
       clearTimeout(timeout);
-      timeout = setTimeout(() => setShowControls(false), 3000);
+      timeout = setTimeout(() => setShowControls(false), 2000);
     };
 
-    const events = ["mousemove", "mousedown", "touchstart", "click"];
-    events.forEach((evt) => document.addEventListener(evt, show));
-    show();
+    if (isFullscreen) {
+      window.addEventListener("mousemove", showTemporarily);
+      window.addEventListener("click", showTemporarily);
+      showTemporarily();
+    }
 
     return () => {
-      events.forEach((evt) => document.removeEventListener(evt, show));
+      window.removeEventListener("mousemove", showTemporarily);
+      window.removeEventListener("click", showTemporarily);
       clearTimeout(timeout);
     };
   }, [isFullscreen]);
@@ -58,16 +60,13 @@ const AnimatedScrollText = ({ text, onSetText }) => {
     setHasStarted(true);
     setIsPaused(false);
     setIsStopped(false);
-    if (!document.fullscreenElement) {
+    if (!document.fullscreenElement && wrapperRef.current) {
       wrapperRef.current.requestFullscreen();
     }
   };
 
   const handlePause = () => {
     setIsPaused((prev) => !prev);
-    if (!document.fullscreenElement) {
-      wrapperRef.current.requestFullscreen();
-    }
   };
 
   const handleStop = () => {
@@ -80,9 +79,7 @@ const AnimatedScrollText = ({ text, onSetText }) => {
   };
 
   const handleRestart = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = 0;
-    }
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
     if (document.fullscreenElement) {
       document.exitFullscreen();
     }
@@ -109,45 +106,30 @@ const AnimatedScrollText = ({ text, onSetText }) => {
     >
       <div
         id="controls"
-        className={isFullscreen && showControls ? "showing" : ""}
+        className={isFullscreen && !showControls ? "" : "showing"}
       >
         {!hasStarted ? (
-          <button id="start-btn" onClick={handleStart}>
-            ▶️ Start
-          </button>
-        ) : isFullscreen ? (
-          <>
-            <button id="pause-btn" onClick={handlePause}>
-              {isPaused ? "▶️ Resume" : "⏸ Pause"}
+          <div className="start-wrapper">
+            <button id="start-btn" onClick={handleStart}>
+              ▶️ Start
             </button>
-
-            <div id="speed-control">
-              <label htmlFor="speed">Speed: {speed}</label>
-              <input
-                type="range"
-                id="speed"
-                min="1"
-                max="10"
-                step="1"
-                value={speed}
-                onChange={(e) => setSpeed(parseInt(e.target.value))}
-              />
-            </div>
-
-            <button id="fullscreen-btn" onClick={toggleFullscreen}>
-              🧭 Exit Fullscreen
-            </button>
-          </>
+          </div>
         ) : (
           <>
             <button id="pause-btn" onClick={handlePause}>
               {isPaused ? "▶️ Resume" : "⏸ Pause"}
             </button>
-
             <button id="stop-btn" onClick={handleStop}>
               ⏹ Stop
             </button>
+            <button id="restart-btn" onClick={handleRestart}>
+              🔄 Restart
+            </button>
+          </>
+        )}
 
+        {(!hasStarted || isFullscreen) && (
+          <>
             <div id="speed-control">
               <label htmlFor="speed">Speed: {speed}</label>
               <input
@@ -161,21 +143,37 @@ const AnimatedScrollText = ({ text, onSetText }) => {
               />
             </div>
 
-            <button id="restart-btn" onClick={handleRestart}>
-              🔄 Restart
-            </button>
-
-            <button id="fullscreen-btn" onClick={toggleFullscreen}>
-              🖥 Fullscreen
-            </button>
+            <div id="font-size-control">
+              <label htmlFor="font-size">Font Size: {fontSize}px</label>
+              <input
+                type="range"
+                id="font-size"
+                min="16"
+                max="48"
+                step="1"
+                value={fontSize}
+                onChange={(e) => setFontSize(parseInt(e.target.value))}
+              />
+            </div>
           </>
         )}
+
+        <button id="fullscreen-btn" onClick={toggleFullscreen}>
+          {isFullscreen ? "🧭 Exit Fullscreen" : "🖥 Fullscreen"}
+        </button>
       </div>
 
       <div id="scroll-container" ref={scrollRef}>
         <div id="scroll-content">
           {text.split("\n").map((line, index) => (
-            <div key={index} className="scroll-line">
+            <div
+              key={index}
+              className="scroll-line"
+              style={{
+                fontSize: `${fontSize}px`,
+                lineHeight: `${fontSize * 1.6}px`,
+              }}
+            >
               {line}
             </div>
           ))}
