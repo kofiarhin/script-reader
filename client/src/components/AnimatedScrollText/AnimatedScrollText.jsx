@@ -12,13 +12,11 @@ const AnimatedScrollText = ({ text, onSetText }) => {
 
   useEffect(() => {
     const intervalDelay = 60;
-
     const interval = setInterval(() => {
       if (hasStarted && !isPaused && !isStopped && scrollRef.current) {
         scrollRef.current.scrollTop += speed;
       }
     }, intervalDelay);
-
     return () => clearInterval(interval);
   }, [hasStarted, isPaused, isStopped, speed]);
 
@@ -26,7 +24,6 @@ const AnimatedScrollText = ({ text, onSetText }) => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
     };
-
     document.addEventListener("fullscreenchange", handleFullscreenChange);
     return () =>
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
@@ -42,11 +39,8 @@ const AnimatedScrollText = ({ text, onSetText }) => {
   };
 
   const handlePause = async () => {
-    // If resuming (isPaused === true), request fullscreen
-    if (isPaused) {
-      if (!document.fullscreenElement && wrapperRef.current) {
-        await wrapperRef.current.requestFullscreen();
-      }
+    if (isPaused && !document.fullscreenElement && wrapperRef.current) {
+      await wrapperRef.current.requestFullscreen();
     }
     setIsPaused((prev) => !prev);
   };
