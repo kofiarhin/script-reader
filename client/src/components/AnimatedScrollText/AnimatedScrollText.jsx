@@ -8,7 +8,7 @@ const AnimatedScrollText = ({ text, onSetText }) => {
   const [isPaused, setIsPaused] = useState(false);
   const [isStopped, setIsStopped] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [speed, setSpeed] = useState(1); // scroll step
+  const [speed, setSpeed] = useState(1);
 
   useEffect(() => {
     const intervalDelay = 60;
@@ -84,9 +84,14 @@ const AnimatedScrollText = ({ text, onSetText }) => {
     >
       <div id="controls">
         {isFullscreen ? (
-          <button id="fullscreen-btn" onClick={toggleFullscreen}>
-            🧭 Exit Fullscreen
-          </button>
+          <>
+            <button id="pause-btn" onClick={handlePause}>
+              {isPaused ? "▶️ Resume" : "⏸ Pause"}
+            </button>
+            <button id="fullscreen-btn" onClick={toggleFullscreen}>
+              🧭 Exit Fullscreen
+            </button>
+          </>
         ) : !hasStarted ? (
           <button id="start-btn" onClick={handleStart}>
             ▶️ Start
